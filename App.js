@@ -5,10 +5,22 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
+  Alert
 } from 'react-native';
 
 export default function App() {
   const [phone, setPhone] = useState('');
+
+  const validatePhone = () => {
+
+    const phoneRegex = /^0[0-9]{9}$/;
+
+    if (!phoneRegex.test(phone)) {
+      Alert.alert("Lỗi", "Số điện thoại không đúng định dạng!");
+    } else {
+      Alert.alert("Thành công", "Số điện thoại hợp lệ!");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -28,18 +40,22 @@ export default function App() {
         onChangeText={setPhone}
         maxLength={10}
       />
+
       <TouchableOpacity
         style={[
           styles.button,
           phone.length < 10 && { backgroundColor: '#e0e0e0' },
         ]}
         disabled={phone.length < 10}
+        onPress={validatePhone}
       >
         <Text style={styles.buttonText}>Tiếp tục</Text>
       </TouchableOpacity>
+
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -76,7 +92,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
-    backgroundColor: '#ccc',
+    backgroundColor: '#4CAF50',
     paddingVertical: 14,
     borderRadius: 6,
     alignItems: 'center',
