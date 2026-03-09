@@ -9,21 +9,41 @@ import {
 } from 'react-native';
 
 export default function App() {
+
   const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
 
+  const phoneRegex = /^0[0-9]{9}$/;
+
+  // format + validation khi nhập
+  const handleChangeText = (text) => {
+
+    // chỉ giữ lại số
+    const formatted = text.replace(/[^0-9]/g, '');
+
+    setPhone(formatted);
+
+    if (formatted.length > 0 && !phoneRegex.test(formatted)) {
+      setError("Số điện thoại không đúng định dạng");
+    } else {
+      setError("");
+    }
+  };
+
+  // validation khi click button
   const validatePhone = () => {
-
-    const phoneRegex = /^0[0-9]{9}$/;
 
     if (!phoneRegex.test(phone)) {
       Alert.alert("Lỗi", "Số điện thoại không đúng định dạng!");
     } else {
       Alert.alert("Thành công", "Số điện thoại hợp lệ!");
     }
+
   };
 
   return (
     <View style={styles.container}>
+
       <Text style={styles.title}>Đăng nhập</Text>
 
       <Text style={styles.label}>Nhập số điện thoại</Text>
@@ -37,9 +57,12 @@ export default function App() {
         placeholder="Nhập số điện thoại của bạn"
         keyboardType="numeric"
         value={phone}
-        onChangeText={setPhone}
+        onChangeText={handleChangeText}
         maxLength={10}
       />
+
+      {/* hiển thị lỗi */}
+      {error ? <Text style={styles.error}>{error}</Text> : null}
 
       <TouchableOpacity
         style={[
@@ -57,6 +80,7 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
     padding: 20,
@@ -88,7 +112,12 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     fontSize: 16,
     paddingVertical: 8,
-    marginBottom: 30,
+  },
+
+  error: {
+    color: 'red',
+    marginTop: 6,
+    marginBottom: 20
   },
 
   button: {
@@ -103,4 +132,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+
 });
